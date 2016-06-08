@@ -11,20 +11,20 @@ func HelloHandler(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
-	// 1. Create a stopwatch.
-	s := stopwatch.New()
+	// 1. Create a channel to receive latency result
+	helloHandlerLatencyChan := make(chan int64)
 
 	// 2. Pull latency result asynchronously.
 	go func() {
 		for {
 			select {
-			case latency := <-s.ResultChan:
-				fmt.Printf("Latency in nanoseconds: %v\n", latency)
+			case latency := <-helloHandlerLatencyChan:
+				fmt.Printf("Latency of HelloHandler in nanoseconds: %v\n", latency)
 			}
 		}
 	}()
 
 	fmt.Println("Starting HTTP server on :12345")
-	http.Handle("/", stopwatch.LatencyFuncHandler(s, HelloHandler))
+	http.Handle("/", stopwatch.LatencyFuncHandler(helloHandlerLatencyChan, HelloHandler))
 	http.ListenAndServe(":12345", nil)
 }
