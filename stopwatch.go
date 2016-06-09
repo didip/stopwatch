@@ -37,5 +37,5 @@ func LatencyHandler(resultChan chan int64, methods []string, next http.Handler) 
 
 // LatencyFuncHandler is a middleware that measures latency given request handler function.
 func LatencyFuncHandler(resultChan chan int64, methods []string, nextFunc func(http.ResponseWriter, *http.Request)) http.Handler {
-	return LatencyHandler(resultChan, http.HandlerFunc(nextFunc))
+	return LatencyHandler(resultChan, methods, http.HandlerFunc(nextFunc))
 }
