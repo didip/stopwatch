@@ -42,12 +42,12 @@ func main() {
 	// 3. Pull latency result asynchronously.
 	go func() {
 		for {
-			select {
-			case latency := <-helloHandlerLatencyChan:
-				payload := fmt.Sprintf("app.%s.requests.HelloHandler %d %d\n", hostnameUnderscore, latency, time.Now().Unix())
+			for latency := range helloHandlerLatencyChan {
+				payload := fmt.Sprintf("graphite-reporting.%s.requests.HelloHandler %d %d\n", hostnameUnderscore, latency, time.Now().Unix())
 				fmt.Printf("Payload for graphite: %v", payload)
 
 				fmt.Fprintf(writer, payload)
+				writer.Flush()
 			}
 		}
 	}()
