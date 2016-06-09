@@ -53,6 +53,6 @@ func main() {
 	}()
 
 	fmt.Println("Starting HTTP server on :12345")
-	http.Handle("/", stopwatch.LatencyFuncHandler(helloHandlerLatencyChan, HelloHandler))
+	http.Handle("/", stopwatch.LatencyFuncHandler(helloHandlerLatencyChan, []string{"GET"}, HelloHandler))
 	http.ListenAndServe(":12345", nil)
 }
