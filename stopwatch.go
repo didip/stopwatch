@@ -23,13 +23,14 @@ func LatencyHandler(resultChan chan int64, methods []string, next http.Handler) 
 			}
 		}
 
-		if foundMethod {
+		if foundMethod && resultChan != nil {
 			start := time.Now().UnixNano()
-			next.ServeHTTP(w, r)
-			resultChan <- (time.Now().UnixNano() - start)
-		} else {
-			next.ServeHTTP(w, r)
+			defer func() {
+				resultChan <- (time.Now().UnixNano() - start)
+			}()
 		}
+
+		next.ServeHTTP(w, r)
 	}
 
 	return http.HandlerFunc(middle)
