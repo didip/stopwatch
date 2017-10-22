@@ -70,3 +70,10 @@ func main() {
     http.ListenAndServe(":12345", nil)
 }
 ```
+
+
+## My other Go libraries
+
+* [Tollbooth](https://github.com/didip/tollbooth): Simple middleware to rate-limit HTTP requests.
+
+* [Gomet](https://github.com/didip/gomet): Simple HTTP client & server long poll library for Go. Useful for receiving live updates without needing Websocket.
